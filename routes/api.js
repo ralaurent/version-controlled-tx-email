@@ -25,7 +25,7 @@ router.post("/send", (req, res) => {
       From: from,
       To: Array.isArray(unqiueRecipients) ? unqiueRecipients.join(", ") : unqiueRecipients,
       TemplateId: templateId,
-      TemplateModel: {...templateModel, customHtmlContent: 'Click <a href="https://www.google.com" class="button button-- trackable-link" target="_blank">Do this Next</a>'},
+      TemplateModel: {...templateModel, customHtmlContent: '<p>Click <a href="https://www.google.com" class="button button-- trackable-link" target="_blank">Do this Next</a></p>'},
       MessageStream: "outbound",
       TrackOpens: true,
       TrackLinks: "HtmlAndText",

@@ -11,7 +11,7 @@ const router = express.Router();
 
 router.post("/open", (req, res) => {
   const { RecordType, MessageID } = req.body;
-z
+
   if (RecordType !== "Open") return res.status(200).send("OK");
 
   const foundEmailStats = findEmailStatsByMessageId(MessageID);

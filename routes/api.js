@@ -46,7 +46,7 @@ router.post("/send", (req, res) => {
         messageId: result.MessageID,
         campaignName: campaignName || "Default Campaign",
         subject: subject,
-        emailTemplateId: EmailTemplates[templateId][EmailTemplates[templateId].length - 1].id,
+        emailTemplateId: templateId,
         createdAt: new Date(),
       };
       Emails.push(newEmail);
@@ -65,7 +65,6 @@ router.post("/send", (req, res) => {
         emailId: newEmail.id,
         clickCount: 0,
         openCount: 0,
-        templateId: templateId,
         totalSent: Array.isArray(unqiueRecipients) ? unqiueRecipients.length : 1,
         createdAt: new Date(),
       });
@@ -89,7 +88,7 @@ router.post("/metrics", (req, res) => {
         (stat) => stat.emailId === foundEmail.id
     );
 
-    const foundEmailTemplate = EmailTemplates[foundEmailStats.templateId][EmailTemplates[foundEmailStats.templateId].length - 1]
+    const foundEmailTemplate = EmailTemplates[foundEmail.emailTemplateId][EmailTemplates[foundEmail.emailTemplateId].length - 1]
 
     const data = {
         template: foundEmailTemplate,

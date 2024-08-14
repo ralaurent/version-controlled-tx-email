@@ -42,7 +42,6 @@ const EmailStats = [
     emailId: 1,
     clickCount: 0,
     openCount: 0,
-    templateId: "36943148",
     totalSent: 0,
     recipients: [],
     createdAt: new Date(),

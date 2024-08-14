@@ -10,23 +10,39 @@ const { findEmailStatsByMessageId } = require("../utils");
 const router = express.Router();
 
 router.get("/openRate", (req, res) => {
-  const { MessageID } = req.body;
+  const { MessageID } = req.query;
 
   const foundEmailStats = findEmailStatsByMessageId(MessageID);
 
-  res
-    .status(200)
-    .send(`${(foundEmailStats.openCount / foundEmailStats.totalSent) * 100}%`);
+  if (foundEmailStats?.totalSent) {
+    res
+      .status(200)
+      .send(
+        `Your open rate is: ${
+          (foundEmailStats?.openCount || 0 / foundEmailStats.totalSent) * 100
+        }%`
+      );
+  } else {
+    res.status(500).send("No stats found for email");
+  }
 });
 
 router.get("/clickRate", (req, res) => {
-  const { MessageID } = req.body;
+  const { MessageID } = req.query;
 
   const foundEmailStats = findEmailStatsByMessageId(MessageID);
 
-  res
-    .status(200)
-    .send(`${(foundEmailStats.clickCount / foundEmailStats.totalSent) * 100}%`);
+  if (foundEmailStats?.totalSent) {
+    res
+      .status(200)
+      .send(
+        `Your click rate is: ${
+          (foundEmailStats?.clickCount || 0 / foundEmailStats.totalSent) * 100
+        }%`
+      );
+  } else {
+    res.status(500).send("No stats found for email");
+  }
 });
 
 module.exports = router;

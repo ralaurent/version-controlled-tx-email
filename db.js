@@ -58,7 +58,6 @@ const EmailTemplates = {
   }]
 }
 
-
 module.exports = {
   Emails,
   Users,

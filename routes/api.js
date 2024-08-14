@@ -25,7 +25,7 @@ router.post("/send", (req, res) => {
       From: from,
       To: Array.isArray(unqiueRecipients) ? unqiueRecipients.join(", ") : unqiueRecipients,
       TemplateId: templateId,
-      TemplateModel: templateModel,
+      TemplateModel: {...templateModel, customHtmlContent: 'Click <a href="https://www.google.com" class="button button-- trackable-link" target="_blank">Do this Next</a>'},
       MessageStream: "outbound",
       TrackOpens: true,
       TrackLinks: "HtmlAndText",
@@ -82,11 +82,13 @@ router.post("/metrics", (req, res) => {
     const { MessageID } = req.body;
 
     const foundEmail = Emails.find((email) => email.messageId === MessageID);
-    if (!foundEmail) return null;
+    if (!foundEmail) return res.status(500).send("No email found");
 
     const foundEmailStats = EmailStats.find(
-        (stat) => stat.emailId === foundEmail.id
+        (stat) => stat.emailId === foundEmail?.id
     );
+
+    if (!foundEmailStats) return res.status(500).send("No stats found for email");
 
     const foundEmailTemplate = EmailTemplates[foundEmail.emailTemplateId][EmailTemplates[foundEmail.emailTemplateId].length - 1]
 

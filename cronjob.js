@@ -24,6 +24,7 @@ async function shortPolling() {
           EmailTemplates[templateId][EmailTemplates[templateId].length - 1]
             .content
       ) {
+        console.log("Change detected")
         EmailTemplates[templateId].push({
           id: EmailTemplates[templateId].length + 1,
           version: uuidv4(),

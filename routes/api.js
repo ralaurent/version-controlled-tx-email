@@ -47,6 +47,7 @@ router.post("/send", (req, res) => {
         campaignName: campaignName || "Default Campaign",
         subject: subject,
         emailTemplateId: templateId,
+        version: EmailTemplates[templateId][EmailTemplates[templateId].length - 1].version,
         createdAt: new Date(),
       };
       Emails.push(newEmail);
@@ -90,7 +91,9 @@ router.post("/metrics", (req, res) => {
 
     if (!foundEmailStats) return res.status(500).send("No stats found for email");
 
-    const foundEmailTemplate = EmailTemplates[foundEmail.emailTemplateId][EmailTemplates[foundEmail.emailTemplateId].length - 1]
+    const foundEmailTemplate = EmailTemplates[foundEmail.emailTemplateId]?.find(template => template.version === foundEmail.version)
+
+    if(!foundEmailTemplate) return res.status(500).send("No template found for email");
 
     const data = {
         template: foundEmailTemplate,

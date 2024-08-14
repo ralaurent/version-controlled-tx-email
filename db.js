@@ -7,6 +7,7 @@ const Emails = [
     campaignName: "Default Campaign",
     subject: "Email Subject",
     emailTemplateId: "36943148",
+    version: uuidv4(),
     createdAt: new Date(),
   },
   {
@@ -15,6 +16,7 @@ const Emails = [
     campaignName: "Demo Campaign",
     subject: "Email Subject",
     emailTemplateId: "36948114",
+    version: uuidv4(),
     createdAt: new Date(),
   },
 ];

@@ -39,8 +39,7 @@ router.post("/send", (req, res) => {
       }));
       Users.push(...newUsers);
 
-      shortPolling(); //Force short polling
-      console.log(EmailTemplates[templateId][EmailTemplates[templateId].length - 1])
+      shortPolling(); //Force short polling to update templates
 
       const newEmail = {
         id: Emails.length + 1,
@@ -71,8 +70,6 @@ router.post("/send", (req, res) => {
         createdAt: new Date(),
       });
 
-      console.log(newUsers, newEmail, newUserEmails, EmailStats);
-
       res
         .status(200)
         .send(`New Campaign started, copy campaign id: ${result.MessageID}!`);
@@ -80,6 +77,29 @@ router.post("/send", (req, res) => {
     .catch(function (err) {
       res.status(500).send(`Error sending email: ${err}`);
     });
+});
+
+router.post("/metrics", (req, res) => {
+    const { MessageID } = req.body;
+
+    const foundEmail = Emails.find((email) => email.messageId === MessageID);
+    if (!foundEmail) return null;
+
+    const foundEmailStats = EmailStats.find(
+        (stat) => stat.emailId === foundEmail.id
+    );
+
+    const foundEmailTemplate = EmailTemplates[foundEmailStats.templateId][EmailTemplates[foundEmailStats.templateId].length - 1]
+
+    const data = {
+        template: foundEmailTemplate,
+        stats: {
+            openRate: `${(foundEmailStats.openCount / foundEmailStats.totalSent) * 100}%`,
+            clickRate: `${(foundEmailStats.clickCount / foundEmailStats.totalSent) * 100}%`,
+        }
+    }
+
+    res.status(200).send(data);
 });
 
 module.exports = router;

@@ -1,0 +1,85 @@
+const express = require("express");
+const postmark = require("postmark");
+const {
+  Emails,
+  Users,
+  UserEmails,
+  EmailStats,
+  EmailTemplates,
+} = require("../db");
+const { findEmailStatsByMessageId } = require("../utils");
+const { shortPolling } = require("../cronjob");
+const router = express.Router();
+require("dotenv").config();
+
+var client = new postmark.ServerClient(process.env.POSTMARK_API_KEY);
+
+router.post("/send", (req, res) => {
+  const { from, to, subject, text, templateId, templateModel, campaignName } =
+    req.body;
+
+  const unqiueRecipients = Array.isArray(to) ? [...new Set(to)] : to;
+
+  client
+    .sendEmailWithTemplate({
+      From: from,
+      To: Array.isArray(unqiueRecipients) ? unqiueRecipients.join(", ") : unqiueRecipients,
+      TemplateId: templateId,
+      TemplateModel: templateModel,
+      MessageStream: "outbound",
+      TrackOpens: true,
+      TrackLinks: "HtmlAndText",
+    })
+    .then(function (result) {
+      let lastUserId = Users.length;
+      const newUsers = unqiueRecipients.map((email) => ({
+        id: ++lastUserId,
+        userEmail: email,
+        createdAt: new Date(),
+      }));
+      Users.push(...newUsers);
+
+      shortPolling(); //Force short polling
+      console.log(EmailTemplates[templateId][EmailTemplates[templateId].length - 1])
+
+      const newEmail = {
+        id: Emails.length + 1,
+        messageId: result.MessageID,
+        campaignName: campaignName || "Default Campaign",
+        subject: subject,
+        emailTemplateId: EmailTemplates[templateId][EmailTemplates[templateId].length - 1].id,
+        createdAt: new Date(),
+      };
+      Emails.push(newEmail);
+
+      let lastUserEmailId = UserEmails.length;
+      const newUserEmails = newUsers.map((user) => ({
+        id: ++lastUserEmailId,
+        userId: user.id,
+        emailId: newEmail.id,
+        createdAt: new Date(),
+      }));
+      UserEmails.push(...newUserEmails);
+
+      EmailStats.push({
+        id: EmailStats.length + 1,
+        emailId: newEmail.id,
+        clickCount: 0,
+        openCount: 0,
+        templateId: templateId,
+        totalSent: Array.isArray(unqiueRecipients) ? unqiueRecipients.length : 1,
+        createdAt: new Date(),
+      });
+
+      console.log(newUsers, newEmail, newUserEmails, EmailStats);
+
+      res
+        .status(200)
+        .send(`New Campaign started, copy campaign id: ${result.MessageID}!`);
+    })
+    .catch(function (err) {
+      res.status(500).send(`Error sending email: ${err}`);
+    });
+});
+
+module.exports = router;

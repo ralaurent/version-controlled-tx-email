@@ -23,4 +23,6 @@ const EmailTemplates = {
 - **Multi-Recipient Support**: Send transactional emails to multiple recipients simultaneously.
 - **Email Metadata Storage**: Maintain records of sent emails, associated campaigns, and user interactions.
 
+## Database Schema
+
 ![Database Schema](images/database-schema.png)

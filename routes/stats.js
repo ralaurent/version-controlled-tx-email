@@ -19,7 +19,7 @@ router.get("/openRate", (req, res) => {
       .status(200)
       .send(
         `Your open rate is: ${
-          (foundEmailStats?.openCount || 0 / foundEmailStats.totalSent) * 100
+          ((foundEmailStats?.openCount || 0 / foundEmailStats.totalSent) * 100).toFixed(2)
         }%`
       );
   } else {
@@ -37,7 +37,7 @@ router.get("/clickRate", (req, res) => {
       .status(200)
       .send(
         `Your click rate is: ${
-          (foundEmailStats?.clickCount || 0 / foundEmailStats.totalSent) * 100
+          ((foundEmailStats?.clickCount || 0 / foundEmailStats.totalSent) * 100).toFixed(2)
         }%`
       );
   } else {

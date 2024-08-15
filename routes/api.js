@@ -119,10 +119,10 @@ router.post("/metrics", (req, res) => {
     template: foundEmailTemplate,
     stats: {
       openRate: `${
-        (foundEmailStats.openCount / foundEmailStats.totalSent) * 100
+        ((foundEmailStats.openCount / foundEmailStats.totalSent) * 100).toFixed(2)
       }%`,
       clickRate: `${
-        (foundEmailStats.clickCount / foundEmailStats.totalSent) * 100
+        ((foundEmailStats.clickCount / foundEmailStats.totalSent) * 100).toFixed(2)
       }%`,
     },
   };

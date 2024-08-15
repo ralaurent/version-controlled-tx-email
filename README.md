@@ -3,6 +3,8 @@
 ![Node.js Version](https://img.shields.io/badge/Node.js-18.x-brightgreen)
 ![Prettier](https://img.shields.io/badge/Prettier-enabled-brightgreen)
 
+[Demo Video](https://www.loom.com/share/c333c367397349439b21f924635d66c4?sid=37d0fba8-a4b2-43c8-a2ea-fc80f02a3010)
+
 ## Features
 
 - **Version-Controlled Email Templates**: Manage and store multiple versions of email templates for easy updates and rollbacks.

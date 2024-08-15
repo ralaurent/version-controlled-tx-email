@@ -84,6 +84,7 @@ router.post("/send", async (req, res) => {
       emailId: newEmail.id,
       clickCount: 0,
       openCount: 0,
+      recipients: [],
       totalSent: Array.isArray(unqiueRecipients) ? unqiueRecipients.length : 1,
       createdAt: new Date(),
     });
@@ -124,6 +125,8 @@ router.post("/metrics", (req, res) => {
       clickRate: `${
         ((foundEmailStats.clickCount / foundEmailStats.totalSent) * 100).toFixed(2)
       }%`,
+      totalSent: foundEmailStats.totalSent,
+      usersWhoClicked: foundEmailStats.recipients,
     },
   };
 

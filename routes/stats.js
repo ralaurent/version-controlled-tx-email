@@ -23,7 +23,7 @@ router.get("/openRate", (req, res) => {
         }%`
       );
   } else {
-    res.status(500).send("No stats found for email");
+    res.status(404).send("No stats found for email");
   }
 });
 
@@ -41,7 +41,7 @@ router.get("/clickRate", (req, res) => {
         }%`
       );
   } else {
-    res.status(500).send("No stats found for email");
+    res.status(404).send("No stats found for email");
   }
 });
 

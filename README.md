@@ -1,4 +1,7 @@
 # Version-Controlled Transactional Email Service
+![JavaScript](https://img.shields.io/badge/JavaScript-ESLint-brightgreen)
+![Node.js Version](https://img.shields.io/badge/Node.js-18.x-brightgreen)
+![Prettier](https://img.shields.io/badge/Prettier-enabled-brightgreen)
 
 ## Features
 
@@ -13,6 +16,7 @@ const EmailTemplates = {
       subject: String,
       version: String,
       content: String,
+      sentStatus: Boolean,
       createdAt: Date,
     },
   ],

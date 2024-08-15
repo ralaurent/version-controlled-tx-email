@@ -22,7 +22,7 @@ router.post("/open", (req, res) => {
 
     res.status(200).send("OK");
   } else {
-    res.status(500).send("No stats found for email");
+    res.status(404).send("No stats found for email");
   }
 });
 
@@ -44,7 +44,7 @@ router.post("/click", (req, res) => {
 
     res.status(200).send("OK");
   } else {
-    res.status(500).send("No stats found for email");
+    res.status(404).send("No stats found for email");
   }
 });
 

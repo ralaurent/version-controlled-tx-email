@@ -17,28 +17,33 @@ async function shortPolling() {
   await Promise.all(
     uniqueTemplates.map(async (templateId) => {
       const template = await getTemplateById(templateId);
+      if (!template) return null;
       if (
         EmailTemplates[templateId] &&
-        template &&
         template.HtmlBody !==
           EmailTemplates[templateId][EmailTemplates[templateId].length - 1]
             .content
       ) {
-        console.log("Change detected")
-        EmailTemplates[templateId].push({
-          id: EmailTemplates[templateId].length + 1,
-          version: uuidv4(),
-          subject: template.Subject,
-          content: template.HtmlBody,
-          createdAt: new Date(),
-        });
-      } else {
+        console.log("Change detected");
+        EmailTemplates[templateId] = [
+          ...EmailTemplates[templateId],
+          {
+            id: EmailTemplates[templateId].length + 1,
+            version: uuidv4(),
+            subject: template.Subject,
+            content: template.HtmlBody,
+            sentStatus: false,
+            createdAt: new Date(),
+          },
+        ];
+      } else if (!EmailTemplates[templateId]) {
         EmailTemplates[templateId] = [
           {
             id: 1,
             version: uuidv4(),
             subject: template.Subject,
             content: template.HtmlBody,
+            sentStatus: false,
             createdAt: new Date(),
           },
         ];
@@ -52,6 +57,6 @@ const job = cron.schedule("*/5 * * * * *", shortPolling);
 job.start();
 
 module.exports = {
-    shortPolling,
-    job,
-}
+  shortPolling,
+  job,
+};

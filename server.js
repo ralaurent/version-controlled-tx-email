@@ -2,7 +2,7 @@ const express = require("express");
 const webhooks = require("./routes/webhooks");
 const stats = require("./routes/stats");
 const api = require("./routes/api");
-require('./cronjob'); 
+require("./cronjob");
 
 const app = express();
 app.use(express.json());

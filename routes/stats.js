@@ -14,17 +14,15 @@ router.get("/openRate", (req, res) => {
 
   const foundEmailStats = findEmailStatsByMessageId(MessageID);
 
-  if (foundEmailStats?.totalSent) {
-    res
-      .status(200)
-      .send(
-        `Your open rate is: ${
-          ((foundEmailStats?.openCount || 0 / foundEmailStats.totalSent) * 100).toFixed(2)
-        }%`
-      );
-  } else {
-    res.status(404).send("No stats found for email");
-  }
+  if (!foundEmailStats) return res.status(404).send("No stats found for email");
+  res
+    .status(200)
+    .send(
+      `Your open rate is: ${(
+        (foundEmailStats.openCount / foundEmailStats.totalSent) *
+        100
+      ).toFixed(2)}%`
+    );
 });
 
 router.get("/clickRate", (req, res) => {
@@ -32,17 +30,15 @@ router.get("/clickRate", (req, res) => {
 
   const foundEmailStats = findEmailStatsByMessageId(MessageID);
 
-  if (foundEmailStats?.totalSent) {
-    res
-      .status(200)
-      .send(
-        `Your click rate is: ${
-          ((foundEmailStats?.clickCount || 0 / foundEmailStats.totalSent) * 100).toFixed(2)
-        }%`
-      );
-  } else {
-    res.status(404).send("No stats found for email");
-  }
+  if (!foundEmailStats) return res.status(404).send("No stats found for email");
+  res
+    .status(200)
+    .send(
+      `Your click rate is: ${(
+        (foundEmailStats.clickCount / foundEmailStats.totalSent) *
+        100
+      ).toFixed(2)}%`
+    );
 });
 
 module.exports = router;
